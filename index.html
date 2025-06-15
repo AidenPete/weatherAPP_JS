@@ -3,15 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>weather APP</title>
+    <title>Simple Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .weather-container {
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #weather-icon {
+            width: 100px;
+            height: 100px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Welcome to the Weather App</h1>
-  <p>Get the latest weather updates for your location.</p>
-    <form action="/weather" method="get">
-        <label for="location">Enter your location:</label>
-        <input type="text" id="location" name="location" required>
-        <button type="submit">Get Weather</button>
-    </form>
+    <h1>Weather App</h1>
+    
+    <div>
+        <input type="text" id="city-input" placeholder="Enter city name">
+        <button id="get-weather-btn">Get Weather</button>
+    </div>
+    
+    <div id="error-message" class="error"></div>
+    
+    <div id="weather-info" class="weather-container" style="display: none;">
+        <h2 id="city-name"></h2>
+        <img id="weather-icon" src="" alt="Weather Icon">
+        <p id="temperature"></p>
+        <p id="weather-description"></p>
+        <p id="humidity"></p>
+        <p id="wind-speed"></p>
+    </div>
+<script type="text/javascript" src="script.js"></script>
 </body>
 </html>

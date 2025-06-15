@@ -1,29 +1,47 @@
-// HTML Elements
-const form = document.getElementById('weatherForm');
-const input = document.getElementById('cityInput');
-const result = document.getElementById('result');
-
-form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const city = input.value.trim();
-    if (!city) {
-        result.textContent = 'Please enter a city name.';
-        return;
+document.addEventListener('DOMContentLoaded', function() {
+    const apiKey = 'a0c030e8b04ff573f429953165ed97d9'; // Replace with your OpenWeatherMap API key
+    const weatherBtn = document.getElementById('get-weather-btn');
+    
+    weatherBtn.addEventListener('click', getWeather);
+    
+    function getWeather() {
+        const city = document.getElementById('city-input').value.trim();
+        const errorElement = document.getElementById('error-message');
+        
+        if (!city) {
+            errorElement.textContent = 'Please enter a city name';
+            return;
+        }
+        
+        errorElement.textContent = '';
+        
+        fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('City not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                displayWeather(data);
+            })
+            .catch(error => {
+                errorElement.textContent = error.message;
+                document.getElementById('weather-info').style.display = 'none';
+            });
     }
-    result.textContent = 'Loading...';
-
-    try {
-        const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('City not found');
-        const data = await response.json();
-        result.innerHTML = `
-            <h2>${data.name}, ${data.sys.country}</h2>
-            <p>Temperature: ${data.main.temp}°C</p>
-            <p>Weather: ${data.weather[0].description}</p>
-        `;
-    } catch (err) {
-        result.textContent = 'Error: ' + err.message;
+    
+    function displayWeather(data) {
+        const weatherInfo = document.getElementById('weather-info');
+        const iconCode = data.weather[0].icon;
+        
+        document.getElementById('city-name').textContent = `${data.name}, ${data.sys.country}`;
+        document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+        document.getElementById('temperature').textContent = `Temperature: ${Math.round(data.main.temp)}°C`;
+        document.getElementById('weather-description').textContent = `Weather: ${data.weather[0].description}`;
+        document.getElementById('humidity').textContent = `Humidity: ${data.main.humidity}%`;
+        document.getElementById('wind-speed').textContent = `Wind Speed: ${data.wind.speed} m/s`;
+        
+        weatherInfo.style.display = 'block';
     }
 });
